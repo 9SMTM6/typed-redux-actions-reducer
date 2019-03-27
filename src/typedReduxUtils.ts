@@ -453,6 +453,8 @@ const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, wit
 
 let exampleState = reducer(undefined, {type: 'INIT'});
 
+// @todo tests auslagern und formalisieren, außerdem wurden folgende fehler nicht früher bemerkt: Verhalten bei aktion ohne payload im reducer (ohne payload wird ignoriert) und im actioncreator (typ war nicht gesetz, error paramerer wurde auch mit gegeben.)
+
 // console.log('before', exampleState);
 // exampleState = reducer(exampleState, withBoth({ payload: { otherload: { num: 5 } } }));
 // console.log('after fitting', exampleState);
