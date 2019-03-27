@@ -391,10 +391,11 @@ export const createReducer = <State extends object, Creators extends ActionCreat
                 if ('onError' in fittingReaction) {
                     return {
                         ...state,
+                        // @ts-ignore
                         ...fittingReaction.onError(state, action.error),
-                    }
+                    };
                 } else {
-                    console.error('Unhandled error occured while handling the Action ' + action.type)
+                    console.error('Unhandled error occured while handling the Action ' + action.type);
                     return state;
                 }
             }
@@ -402,11 +403,12 @@ export const createReducer = <State extends object, Creators extends ActionCreat
                 return {
                     ...state,
                     ...fittingReaction.onSuccess(state, action.payload),
-                }
+                };
             }
-        }
-    }
-}
+            return state;
+        };
+    };
+};
 
 // -------------------------------- tests
 
