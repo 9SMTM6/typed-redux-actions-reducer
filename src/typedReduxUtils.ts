@@ -382,7 +382,7 @@ export const createReducer = <State extends object, Creators extends ActionCreat
     return (reactions: AllReactionsRecord) => {
         // tslint: disable-next-line no-any We need to enable all kinds of actions here.
         // this any here also disables type testing later on, but we already assured the right type (more or less)
-        return (state: State | undefined = initialState, action: Action<string, ActionData<object | false, ActionError | false>>): State => {
+        return (state: State | undefined = {...initialState}, action: Action<string, ActionData<object | false, ActionError | false>>): State => {
             const fittingReaction = reactions[action.type] as (ReactionsRecord<any, any, any, State> | undefined); // this is the 'switch-case'
             if (!fittingReaction) { // this is the 'default' case
                 return state;
