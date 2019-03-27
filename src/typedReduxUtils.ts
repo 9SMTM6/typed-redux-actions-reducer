@@ -405,7 +405,10 @@ export const createReducer = <State extends object, Creators extends ActionCreat
                     ...fittingReaction.onSuccess(state, action.payload),
                 };
             }
-            return state;
+            return {
+                ...state,
+                ...fittingReaction.onSuccess(state, undefined)
+            };
         };
     };
 };
