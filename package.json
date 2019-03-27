@@ -1,6 +1,6 @@
 {
   "name": "typed-redux-actions-reducer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A framework helping with the reduction of Boilerplate and correctly Typing everything when combining Redux with Typescript.",
   "main": "typedReduxUtils.ts",
   "scripts": {
@@ -17,7 +17,7 @@
     "actions-creator",
     "reducer"
   ],
-  "author": "Samuel Maier <samuel.maier@iteratec.de",
+  "author": "Samuel Maier <samuel.maier@iteratec.de>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/9SMTM6/typed-redux-actions-reducer/issues"
