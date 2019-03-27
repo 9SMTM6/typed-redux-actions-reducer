@@ -210,7 +210,7 @@ export const declareActionCreater: DeclareActionCreator = (TYPE, PAYLOADSAMPLE, 
             };
         }
         return {
-            error: { msg: 'Unknown error during creation of ' + TYPE }
+            type: TYPE,
         };
     };
     actionCreater.TYPE = TYPE;
