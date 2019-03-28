@@ -150,22 +150,32 @@ const createdAction = testCreatorBoth({ error: { msg: 'this is also an error' } 
 
 // ---------------------- new code
 
-/** 
- * Forces people to give arguments for `SAMPLEDATA` and `SAMPLEERROR`.
- * 
- * This makes for a far easier implementation in Typescript and forces people to think abou
- * if they really dont want to handle errors etc.
+/**
+ * Overload for the case of declared or undeclared payload-type and error type.
  */
-type DeclareActionCreator = <
-    TYPE extends string,
-    Payload extends (object | false),
-    Error extends (ActionError | false),
-    >(
-    TYPE: TYPE,
-    SAMPLEDATA: Payload,
-    SAMPLEERROR: Error,
-) => ActionCreator<TYPE, Payload, Error>;
-
+type DeclareActionCreator = {
+    <
+        TYPE extends string,
+        Payload extends (object | false),
+        Error extends (ActionError | false),
+        >(
+        TYPE: TYPE,
+        SAMPLEDATA: Payload,
+        SAMPLEERROR: Error,
+    ): ActionCreator<TYPE, Payload, Error>;
+    <
+        TYPE extends string,
+        Payload extends (object | false),
+        >(
+        TYPE: TYPE,
+        SAMPLEDATA: Payload,
+    ): ActionCreator<TYPE, Payload, false>;
+    <
+        TYPE extends string,
+        >(
+        TYPE: TYPE,
+    ): ActionCreator<TYPE, false, false>;
+}
 /**
  * Usage:
  * @param TYPE The string thats matched in the Reducer
@@ -182,9 +192,9 @@ type DeclareActionCreator = <
  * Beside that it also makes sense as the `TYPE` Field really is sort of a Type too,
  * the whole declaration of an action is really just one big type declaration if you think about it.
  */
-export const declareActionCreater: DeclareActionCreator = (TYPE, PAYLOADSAMPLE, ERRORSAMPLE) => {
+export const declareActionCreater: DeclareActionCreator = (TYPE, PAYLOADSAMPLE = false, ERRORSAMPLE = false) => {
     [PAYLOADSAMPLE, ERRORSAMPLE].forEach((SAMPLE) => {
-        if (SAMPLE && (0 !== Object.keys(PAYLOADSAMPLE as object).length)) {
+        if (SAMPLE && (0 !== Object.keys(SAMPLE as unknown as object).length)) {
             // tslint:disable no-console max-line-length
             console.error('Error while creating an action: Unintended use of the SAMPLE parameter, potentially generating an unintended Types');
         }
@@ -382,7 +392,7 @@ export const createReducer = <State extends object, Creators extends ActionCreat
     return (reactions: AllReactionsRecord) => {
         // tslint: disable-next-line no-any We need to enable all kinds of actions here.
         // this any here also disables type testing later on, but we already assured the right type (more or less)
-        return (state: State | undefined = {...initialState}, action: Action<string, ActionData<object | false, ActionError | false>>): State => {
+        return (state: State | undefined = { ...initialState }, action: Action<string, ActionData<object | false, ActionError | false>>): State => {
             const fittingReaction = reactions[action.type] as (ReactionsRecord<any, any, any, State> | undefined); // this is the 'switch-case'
             if (!fittingReaction) { // this is the 'default' case
                 return state;
@@ -451,7 +461,7 @@ const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, wit
     }
 })
 
-let exampleState = reducer(undefined, {type: 'INIT'});
+let exampleState = reducer(undefined, { type: 'INIT' });
 
 // @todo tests auslagern und formalisieren, außerdem wurden folgende fehler nicht früher bemerkt: Verhalten bei aktion ohne payload im reducer (ohne payload wird ignoriert) und im actioncreator (typ war nicht gesetz, error paramerer wurde auch mit gegeben.)
 

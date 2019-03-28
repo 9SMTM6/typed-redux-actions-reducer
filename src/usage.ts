@@ -18,7 +18,7 @@ const action = newActionCreater({ payload: {
     }
 }})
 
-const onlyMessage = declareActionCreater('ONLY_MESSAGE', false, false);
+const onlyMessage = declareActionCreater('ONLY_MESSAGE');
 
 const withPayload = declareActionCreater(
     'WITH_PAYLOAD', 
@@ -43,8 +43,7 @@ let exampleInit = {
     text: 'Initial filling'
 };
 
-const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, withBoth, onlyMessage })(
-    {
+const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, withBoth, onlyMessage })({
     WITH_ERRORHANDLING: {
         onSuccess: (state, payload) => {
             return {};
@@ -53,7 +52,7 @@ const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, wit
     WITH_PAYLOAD: {
         onSuccess: (state) => {
             return state;
-        }
+        },
     },
     ONLY_MESSAGE: {
         onSuccess: (state, payload) => {
@@ -86,3 +85,9 @@ exampleState = reducer(exampleState, withBoth({ error: { msg: 'does this work?' 
 console.log('after error', exampleState);
 exampleState = reducer(exampleState, { type: 'WITH_PAYLOAD', error: { msg: 'does this work?' } });
 console.log('after error 2', exampleState);
+
+let exampleState2 = reducer(undefined, { type: 'OTHER_ACTION', error: { msg: 'Shouldnt do a thing' } });
+console.log(exampleState2)
+
+exampleState2 = reducer(exampleState2, withBoth({ payload: { otherload: { num: 2 } } }))
+console.log(exampleState2)
