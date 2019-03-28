@@ -4,27 +4,21 @@
 
 type ActionBloat<TYPE extends string = string> = { type: TYPE };
 
-type ActionError = { msg: string };
-
 type ActionData<
     Payload extends (object | false),
-    Error extends (ActionError | false),
-    > = Payload extends object ?
-    (Error extends ActionError ? ({ payload: Payload } | { error: Error }) : // case both error and payload are defined
-        { payload: Payload }) : // case payload is defined but no error handling
-    Error extends ActionError ? ({ error?: Error }) // case no payload but error handling is covered
-    : {}; // case no error handling or payload, so never any data.
-
-// cant use never at the end because: 
-type resolvesToNever = { some: string, data: boolean } & never;
+    Error extends (object | false),
+    > = Payload extends false ? Error extends false ?
+    {} : // no payload, no error (would prefer never but that would result in union types being resoved to never.)
+    { error?: Error } : // error, no payload
+    Error extends false ?
+    { payload: Payload } : // no error, payload
+    { payload: Payload } | { error: Error }; // payload or error
 
 // --------------------- test
 
 type TestDataBoth = ActionData<{ pa: number }, { msg: string }>; // expect {payload: Payload} | {error: extends ActionError}, 
-// throws error on no msg in error
 
 type TestDataNoPayload = ActionData<false, { msg: string, addInfo: string }>; // expect {payload: Payload} | {error?: extends ActionError}, 
-// throws error on no msg in error
 
 type TestDataNoError = ActionData<{ param: string }, false>; // expect {payload: Payload}
 
@@ -34,15 +28,12 @@ type TestDataNothing = ActionData<false, false>; // expect undefined
 
 export type Action<
     TYPE extends string,
-    Data extends ActionData<false | object, false | ActionError>,
-    > = ActionBloat<TYPE> & (Data extends ActionData<infer Payload, infer Error> ? Data :
-        ActionData<false, { msg: string }>); // unknown);
+    Data extends ActionData<false | object, false | object>,
+    > = ActionBloat<TYPE> & (Data extends ActionData<infer Payload, infer Error> ? ActionData<Payload, Error> :
+        Data extends {} ? ActionData<false, any> : unknown); // unknown);
 /* Above line is handling an error in Typescript
 When no payload is defined a Action can be undefined (i.e. just the message). In this case Typescript seems unable to 
 figure out that this 'undefined' can indeed be an extention of ActionData, and thus is choosing the last option, unknown.
-
-This is causing the following issues right now: Typescript is loosing type Information and presumably savety. 
-Though the unknown following the line should theoretically never occur.
 
 Other option: Enforce that theres always an "data"-Object.
  */
@@ -95,7 +86,7 @@ Seems to work at first (like when testing with {}) but then fails on real tests 
 export type ActionCreator<
     TYPE extends string,
     Payload extends false | object,
-    Error extends false | ActionError,
+    Error extends false | object,
     > = (Payload extends false ? { // make parameter optional in case theres no payload 
         // (could be error thus we still need it)
         (data?: ActionData<Payload, Error>): Action<TYPE, ActionData<Payload, Error>>
@@ -157,7 +148,7 @@ type DeclareActionCreator = {
     <
         TYPE extends string,
         Payload extends (object | false),
-        Error extends (ActionError | false),
+        Error extends (object | false),
         >(
         TYPE: TYPE,
         SAMPLEDATA: Payload,
@@ -176,6 +167,7 @@ type DeclareActionCreator = {
         TYPE: TYPE,
     ): ActionCreator<TYPE, false, false>;
 }
+
 /**
  * Usage:
  * @param TYPE The string thats matched in the Reducer
@@ -288,7 +280,7 @@ type OnError<
         error: Error
     ) => Partial<State> : never;
 
-type ReactionsRecord<TYPE extends string, Payload extends (false | object), Error extends (false | ActionError), State extends object> = {
+type ReactionsRecord<TYPE extends string, Payload extends (false | object), Error extends (false | object), State extends object> = {
     onSuccess: OnSuccess<ActionCreator<TYPE, Payload, Error>, State>;
     onError?: OnError<ActionCreator<TYPE, Payload, Error>, State>;
 }
@@ -315,18 +307,18 @@ const someReaction: SomeReaction = (state, payload) => {
 
 // ---------------------- new code
 
-type NormReaction<TYPE extends string, Payload extends (false | object), Error extends (false | ActionError), State extends object> = (
+type NormReaction<TYPE extends string, Payload extends (false | object), Error extends (false | object), State extends object> = (
     state: State,
     action: Action<TYPE, ActionData<Payload, Error>>,
 ) => State
 
-type ReactionNormer<TYPE extends string, Payload extends (false | object), Error extends (false | ActionError), State extends object> = (
+type ReactionNormer<TYPE extends string, Payload extends (false | object), Error extends (false | object), State extends object> = (
     reactions: ReactionsRecord<TYPE, Payload, Error, State>
-) => NormReaction<string, false | object, false | ActionError, State>;
+) => NormReaction<string, false | object, false | object, State>;
 
-type ActionCreatorObject = { [Key: string]: ActionCreator<string, false | object, false | ActionError> }
+type ActionCreatorObject = { [Key: string]: ActionCreator<string, false | object, false | object> }
 
-type ReactionsObject = { [Key: string]: ReactionNormer<string, false | object, false | ActionError, object> }
+type ReactionsObject = { [Key: string]: ReactionNormer<string, false | object, false | object, object> }
 
 // -------------------------------- tests
 
@@ -392,7 +384,7 @@ export const createReducer = <State extends object, Creators extends ActionCreat
     return (reactions: AllReactionsRecord) => {
         // tslint: disable-next-line no-any We need to enable all kinds of actions here.
         // this any here also disables type testing later on, but we already assured the right type (more or less)
-        return (state: State | undefined = { ...initialState }, action: Action<string, ActionData<object | false, ActionError | false>>): State => {
+        return (state: State | undefined = { ...initialState }, action: Action<string, ActionData<object | false, object | false>>): State => {
             const fittingReaction = reactions[action.type] as (ReactionsRecord<any, any, any, State> | undefined); // this is the 'switch-case'
             if (!fittingReaction) { // this is the 'default' case
                 return state;
@@ -409,15 +401,9 @@ export const createReducer = <State extends object, Creators extends ActionCreat
                     return state;
                 }
             }
-            if ('payload' in action && action.payload) {
-                return {
-                    ...state,
-                    ...fittingReaction.onSuccess(state, action.payload),
-                };
-            }
             return {
                 ...state,
-                ...fittingReaction.onSuccess(state, undefined)
+                ...fittingReaction.onSuccess(state, action['payload']),
             };
         };
     };
