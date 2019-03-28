@@ -45,17 +45,17 @@ let exampleInit = {
 
 const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, withBoth, onlyMessage })({
     WITH_ERRORHANDLING: {
-        onSuccess: (state, payload) => {
+        onSuccess: (state) => {
             return {};
         },
     },
     WITH_PAYLOAD: {
-        onSuccess: (state) => {
+        onSuccess: (state, payload) => {
             return state;
         },
     },
     ONLY_MESSAGE: {
-        onSuccess: (state, payload) => {
+        onSuccess: (state) => {
             return {};
         }
     },

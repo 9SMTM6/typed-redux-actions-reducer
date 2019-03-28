@@ -280,18 +280,18 @@ type genLoad = ExtractActionLoad<typeof withBoth>;
 type OnSuccess<
     Creator extends (...params: unknown[]) => unknown,
     State extends object
-    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? (
-        state: State,
-        payload: Payload
-    ) => Partial<State> : never;
+    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? 
+    Payload extends false ?
+    (state: State) => Partial<State> : 
+    (state: State, payload: Payload) => Partial<State>: never;
 
 type OnError<
     Creator extends (...params: unknown[]) => unknown,
     State extends object
-    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? (
-        state: State,
-        error: Error
-    ) => Partial<State> : never;
+    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? 
+    Error extends false ? 
+    (state: State) => Partial<State> :
+    (state: State, error: Error) => Partial<State> : never;
 
 type ReactionsRecord<TYPE extends string, Payload extends (false | object), Error extends (false | object), State extends object> = {
     onSuccess: OnSuccess<ActionCreator<TYPE, Payload, Error>, State>;
@@ -431,17 +431,17 @@ let exampleInit = {
 
 const reducer = createReducer(exampleInit, { withPayload, withErrorhandling, withBoth, onlyMessage })({
     WITH_ERRORHANDLING: {
-        onSuccess: (state, payload) => {
+        onSuccess: (state) => {
             return {};
         },
     },
     WITH_PAYLOAD: {
-        onSuccess: (state) => {
+        onSuccess: (state, payload) => {
             return state;
         }
     },
     ONLY_MESSAGE: {
-        onSuccess: (state, payload) => {
+        onSuccess: (state) => {
             return {};
         }
     },
