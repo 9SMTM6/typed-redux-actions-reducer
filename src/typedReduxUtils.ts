@@ -416,6 +416,8 @@ export const createReducer = <State extends object, Creators extends ActionCreat
             }
             return {
                 ...state,
+                // Javascript will just ignore an additional parameter if its not defined on the function,
+                // so this is legal wheter a payload is defined or handle just the most simple action.
                 ...fittingReaction.onSuccess(state, action['payload']),
             };
         };
