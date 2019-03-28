@@ -219,6 +219,19 @@ export const declareActionCreater: DeclareActionCreator = (TYPE, PAYLOADSAMPLE =
     return actionCreater;
 };
 
+/**
+ * PLACEHOLDER
+ * 
+ * wondering if we can get type-testing for the connected store and the reducer.
+ * could alternatively create an connected reducer?
+ * 
+ * @returns either a wrapped declareActionCreator OR an object having this as named parameter 'connectedActionCreater'.
+ * Reason: Dont have people accidentially importing the unconnected declareActionCreator from here (IDE) if they call it the same.
+ * The object would be a small nudge in the 'different name' direction
+ */
+export const declareConnectedActionCreater = (dispatch?: any, store?: any) => {
+}
+
 // -------------------------------------- tests
 
 const onlyMessage = declareActionCreater('ONLY_MESSAGE', false, false);
