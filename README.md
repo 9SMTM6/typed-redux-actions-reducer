@@ -20,9 +20,9 @@ Only tested with Redux 4 so far.
 * [Alternatives](#alternatives)
 * [Credits](#credits)
 
-## [Motivation](#)(name=motivation)
+## Motivation
 
-### [Action-Creaters](#)(name=motiv-actionCreaters)
+### Action-Creaters
 
 If you think about it Parts of the usual usage of Redux and Typescript really have the same Purpose. When you declare your `'ACTION_TYPE'` and an Action Creater: 
 
