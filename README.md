@@ -11,18 +11,18 @@ Only tested with Redux 4 so far.
 
 ## Contents:
 
-* [Motivation](#Motivation)
-    * [For declareActionCreater](#Action-Creaters)
-    * [For createReducer](#Create-Reducer)
-* [Usage](#Usage)
-    * [Of declareActionCreaters](#Create-an-Action-Creater-and-its-usage)
-    * [Of createReducer](#Creating-an-reducer-handling-the-actions-by-declared-Action-Creators)
-* [Alternatives](#Alternatives)
-* [Credits](#Credits)
+* [Motivation](#motivation)
+    * [For declareActionCreater](#motiv-actionCreaters)
+    * [For createReducer](#create-reducer)
+* [Usage](#usage)
+    * [Of declareActionCreaters](#create-an-action-creater-and-its-usage)
+    * [Of createReducer](#creating-an-reducer-handling-the-actions-by-declared-action-creators)
+* [Alternatives](#alternatives)
+* [Credits](#credits)
 
-## Motivation:
+## [Motivation](#)(name=motivation)
 
-### Action-Creaters:
+### [Action-Creaters](#)(name=motiv-actionCreaters)
 
 If you think about it Parts of the usual usage of Redux and Typescript really have the same Purpose. When you declare your `'ACTION_TYPE'` and an Action Creater: 
 
@@ -53,7 +53,7 @@ Another thing I prefer is not to have seperate Actions for the Action or the cas
 
 The Action-Creators in this package are meant to plug into existing state management without larger problems but collect the Type-Declarations in one place, as well as supporting error handling in one action and enforcing that the Creation of an Action is not doing part of the State-Building itself. To do that in a unified fashion the creation of an Action is a bit more verbose than with other approaches, but because of the provided type information IDEs will offer a lot of Autocompletion, leading to simular amounts of total writing.
 
-### Create-Reducer:
+### Create-Reducer
 
 Typing a reducer correctly isnt neccesarily easy. If you dont want to work with a lot of Type-Assertion - that classically you'd have to import not only the - you need proper Mapped Types that map the Type of `action.type` to the type of `action.payload` and `action.error`. To do that you also need to ensure that the Type of `action.type` doesnt widen from a string-literal to a string, loosing the ability to get the complete type of the action by switch-case.
 
@@ -65,11 +65,11 @@ You see, theres a lot of potential issues you face when you want to create a typ
 
 This packackage aims to make an reducer that is completely typed (it provides payload, error and state type, and checks the return). It also should have minimal boilerplate as possible with standardized error-handling with the same action and be compatible with strictFunctionTypes. Though it has the described potential issue without strictFunctionTypes. All that while providing a visual (and also implemented) control flow simular to the usual switch-case reducers, meaning `action.type`--'Cases' with the reactions and minimal performance overhead, as well as merging the return, which needs only be part of the state, with the state.
 
-## Usage:
+## Usage
 
 See also src/usage.ts
 
-### Create an Action-Creater and its usage:
+### Create an Action-Creater and its usage
 
 A simple action without payload:
 ```ts
@@ -113,7 +113,7 @@ const payloadOrErrorAction2 = payloadOrErrorActionCreater({ error: { errordata: 
 ```
 Error or Payload argument are both type-tested.
 
-### Creating an reducer handling the actions by declared Action-Creators:
+### Creating an reducer handling the actions by declared Action-Creators
 
 What sets this Package apart from others is not the declaration of Action-Creaters, theres [other packages](https://github.com/piotrwitek/typesafe-actions) that handle this gracefully.
 
@@ -126,7 +126,7 @@ Typescript will check whether you handle all cases and if your return value is l
 I recommend anyone new to/ willing to Improve his handling of the COmbination Typescript, React and Redux to read [this Guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
 
-## Credits:
+## Credits
 
 * Thanks a lot to [Piotr Lewandowski](https://medium.com/dailyjs/typescript-create-a-condition-based-subset-types-9d902cea5b8c) for showing me whats possible with Typescripts conditional Types. Without a trick he shows in this article I would probably not have been able to create a fully typed dictionary using the type of the action and not the name of the Actioncreater.
 * Also thanks to [Marius Schulz](https://mariusschulz.com/blog/series/typescript-evolution). His blog was a good reference for correct Syntax of newer Typescript features not mentioned in the - very old - official Typescript documentation.
