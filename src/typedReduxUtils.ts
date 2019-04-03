@@ -402,7 +402,7 @@ export const createReducer = <State extends object, Creators extends ActionCreat
             if (!fittingReaction) { // this is the 'default' case
                 return state;
             }
-            if (('error' in action && action.error)) { // this is ecexuting the right reaction and merging it with the state
+            if (('error' in action)) { // this is ecexuting the right reaction and merging it with the state
                 if ('onError' in fittingReaction) {
                     return {
                         ...state,
@@ -417,7 +417,7 @@ export const createReducer = <State extends object, Creators extends ActionCreat
             return {
                 ...state,
                 // Javascript will just ignore an additional parameter if its not defined on the function,
-                // so this is legal wheter a payload is defined or handle just the most simple action.
+                // so this is legal wheter a payload is defined or this is just a simple action.
                 ...fittingReaction.onSuccess(state, action['payload']),
             };
         };
