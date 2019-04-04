@@ -1,5 +1,5 @@
 # typed-redux-actions-reducer
-A framework helping with the reduction of Boilerplate when combining Redux with Typescript. 
+A package helping with the reduction of Boilerplate when combining Redux with Typescript. 
 
 ![TOTAL Downloads](https://img.shields.io/npm/dt/typed-redux-actions-reducer.svg)
 
@@ -30,6 +30,8 @@ See also src/usage.ts
 
 A simple action without payload:
 ```ts
+let actions: Array<Action<string, object>> = [];
+
 const simpleActionCreater = declareActionCreater("SIMPLE_ACTION");
 
 const simpleAction = simpleActionCreater(); // expect: {type: "SIMPLE_ACTION"}

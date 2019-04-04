@@ -1,10 +1,12 @@
 {
   "name": "typed-redux-actions-reducer",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A framework helping with the reduction of Boilerplate and correctly Typing everything when combining Redux with Typescript.",
   "main": "build/typedReduxUtils.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "broadcast":"tsc && git push && npm publish",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-usage": "tsc --project usage && node usage/compiled/usage/reducer.js"
   },
   "repository": {
     "type": "git",
@@ -15,7 +17,8 @@
     "redux",
     "actions",
     "actions-creator",
-    "reducer"
+    "reducer",
+    "biolerplate"
   ],
   "author": "Samuel Maier <samuel.maier@iteratec.de>",
   "license": "MIT",

@@ -1,2 +1,4 @@
 *.js
 /build
+
+/usage/compiled
