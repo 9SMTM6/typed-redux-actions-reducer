@@ -280,7 +280,7 @@ type genLoad = ExtractActionLoad<typeof withBoth>;
 type OnSuccess<
     Creator extends (...params: unknown[]) => unknown,
     State extends object
-    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? 
+    > = Creator extends ActionCreator<infer TYPE, infer Payload, infer Error> ? 
     Payload extends false ?
     (state: State) => Partial<State> : 
     (state: State, payload: Payload) => Partial<State>: never;
@@ -288,7 +288,7 @@ type OnSuccess<
 type OnError<
     Creator extends (...params: unknown[]) => unknown,
     State extends object
-    > = Creator extends ActionCreator<string, infer Payload, infer Error> ? 
+    > = Creator extends ActionCreator<infer TYPE, infer Payload, infer Error> ? 
     Error extends false ? 
     (state: State) => Partial<State> :
     (state: State, error: Error) => Partial<State> : never;
