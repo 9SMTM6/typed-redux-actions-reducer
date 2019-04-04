@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.json",
+    "include": [
+        "."
+    ],
+    "compilerOptions": {
+        "outDir": "compiled",
+        "declaration": false, /* Generates corresponding '.d.ts' file. */
+        "declarationMap": false, /* Generates a sourcemap for each corresponding '.d.ts' file. */
+        "sourceMap": false, /* Generates corresponding '.map' file. */
+    }
+}
