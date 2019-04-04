@@ -242,7 +242,14 @@ I'm open for all suggestions, but I'm really interested in a few aspects:
 
 * That name is horrible, but there is already so many flavours of packages that combine Redux and TypeScript... If you know a good name I'd love to hear!
 * Is there interest in a Builder which registers a store and returns a Variation of declareActionCreater that automatically dispatches
+* Should I maybe handle errors differently, always allowing to dispatch an error with `actionCreater({error: {}})`? I would also add the option to do `actionCreater({payload: {}})` as alternative to just `actionCreater()` in that case.
 * ...more stuff I cant list right now.
+
+## TODO:
+
+* Break up the monolith of almost 500 lines
+
+* write snapshot-tests
 
 ## Alternatives
 
