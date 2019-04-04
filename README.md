@@ -1,6 +1,8 @@
 # typed-redux-actions-reducer
 A framework helping with the reduction of Boilerplate when combining Redux with Typescript. 
 
+![TOTAL Downloads](https://img.shields.io/npm/dt/typed-redux-actions-reducer.svg)
+
 **This is an Prototype**
 
 An `action` created by the Action-Creaters is following the [Flux-Standard-Action](https://github.com/redux-utilities/flux-standard-action) with the optional `action.payload` and `action.error` fields (`action-meta` is not supported so far).
