@@ -93,6 +93,10 @@ What sets this Package apart from others is not the declaration of Action-Create
 
 Its the ease of creating fully typed reducers using these Action(-Creaters). To do so you need only provide the type of actions, represented by the action-creators, and the state - and initial state - of the reducer.
 
+You can, dont have to though, write an explicit reaction to the error case. Default reaction is to console.error the action.type and keep the state as-is.
+
+The handled action-creators currently have a quite strict type requirement, maybe I can widen that but that is not a priority for me right now. Thus I recommend to only handle Action-Creaters created with the inhouse `declareActionCreater` with `createReducer`.
+
 ```ts
 const initialState: {
     registeredActions: Array<{
