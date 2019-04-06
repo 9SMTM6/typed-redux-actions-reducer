@@ -2,7 +2,7 @@
   "name": "typed-redux-actions-reducer",
   "version": "0.0.21",
   "description": "A framework helping with the reduction of Boilerplate and correctly Typing everything when combining Redux with Typescript.",
-  "main": "build/typedReduxUtils.js",
+  "main": "build/index.js",
   "scripts": {
     "broadcast":"tsc && git push && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1",

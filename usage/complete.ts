@@ -1,4 +1,4 @@
-import { declareActionCreater, createReducer, Action } from "../src/typedReduxUtils";
+import { declareActionCreater, createReducer, Action } from "../src";
 
 let actions: Array<Action<string, object>> = [];
 
@@ -9,7 +9,7 @@ const simpleAction = simpleActionCreater(); // expect: {type: "SIMPLE_ACTION"}
 actions.push(simpleAction);
 
 // if you need the type-string:
-const SIMPLE_ACTION = simpleAction.type;
+const SIMPLE_ACTION = simpleActionCreater.TYPE;
 
 // if you need the Action-Type: 
 type ISIMPLE_ACTION = ReturnType<typeof simpleActionCreater>;

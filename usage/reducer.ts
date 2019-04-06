@@ -1,5 +1,5 @@
 import * as actionCreators from "./actionCreaters";
-import { createReducer } from "../src/typedReduxUtils";
+import { createReducer } from "../src";
 import * as actions from "./consumation";
 
 

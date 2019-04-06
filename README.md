@@ -1,13 +1,16 @@
 # typed-redux-actions-reducer
+
+[To be renamed to typed-redux-helpers](#feedback)
+
 A package helping with the reduction of Boilerplate when combining Redux with Typescript. 
 
 ![TOTAL Downloads](https://img.shields.io/npm/dt/typed-redux-actions-reducer.svg)
 
-**This is an Prototype**
+**This is a Prototype**
 
-An `action` created by the Action-Creaters is following the [Flux-Standard-Action](https://github.com/redux-utilities/flux-standard-action) with the optional `action.payload` and `action.error` fields (`action-meta` is not supported so far).
+An `action` created by the Action-Creaters is following the [Flux-Standard-Action](https://github.com/redux-utilities/flux-standard-action) with the optional `action.payload` and `action.error` fields (`action.meta` is not supported. If you can provide good arguments I may change that.).
 
-Using Action-Creators build with `declareActionCreator` you can easily create an completely typed Reducer with `createReducer`. The defined Reactions only have to return the difference to the previous state, the rest is merged automatically.
+Using Action-Creators build with `declareActionCreater` you can easily create an completely typed Reducer with `createReducer`. The defined Reactions only have to return the difference to the previous state, the rest is merged automatically.
 
 Only tested with Redux 4 so far.
 
@@ -15,29 +18,27 @@ Only tested with Redux 4 so far.
 
 * [Usage](#usage)
     * [Of declareActionCreaters](#create-an-action-creater-and-its-usage)
-    * [Of createReducer](#creating-an-reducer-handling-the-actions-by-declared-action-creators)
+        * [Embed these actions into an traditional Reducer](#embedding-an-action-into-an-traditional-code-like-a-traditional-reducer)
+    * [Of createReducer](#creating-an-reducer-handling-the-actions-by-declared-action-creaters)
 * [Motivation](#motivation)
     * [For declareActionCreater](#action-creaters)
     * [For createReducer](#create-reducer)
+* [Feedback](#feedback)
+* [TODO](#todo)
 * [Alternatives](#alternatives)
 * [Credits](#credits)
 
 ## Usage
 
-See also src/usage.ts
+See also src/usage on Github
 
 ### Create an Action-Creater and its usage
 
 A simple action without payload:
 ```ts
-let actions: Array<Action<string, object>> = [];
-
 const simpleActionCreater = declareActionCreater("SIMPLE_ACTION");
 
 const simpleAction = simpleActionCreater(); // expect: {type: "SIMPLE_ACTION"}
-
-// if you need the type-string:
-const SIMPLE_ACTION = simpleAction.type;
 ```
 The created Action-Creater not only works as a function, but also as an object which has an TYPE-Field, which holds the type-String.
 
@@ -72,7 +73,21 @@ const payloadOrErrorAction2 = payloadOrErrorActionCreater({ error: { errordata: 
 ```
 Error or Payload argument are both type-tested.
 
-### Creating an reducer handling the actions by declared Action-Creators
+#### Embedding an action into an traditional code like a traditional reducer
+
+**I recommend a to create the reducer with the inhouse [`createReducer`](#creating-an-reducer-handling-the-actions-by-declared-Action-Creaters) unless you want to handle legacy actions and ones by this package in the same reducer**
+
+```ts
+// if you need the type-string:
+const SIMPLE_ACTION = simpleActionCreater.TYPE;
+
+// if you need the Action-Type: 
+type ISIMPLE_ACTION = ReturnType<typeof simpleActionCreater>;
+```
+
+This works for all the actions created by `declareActionCreater`.
+
+### Creating an reducer handling the actions by declared Action-Creaters
 
 What sets this Package apart from others is not the declaration of Action-Creaters, theres [other packages](https://github.com/piotrwitek/typesafe-actions) that handle this gracefully.
 
@@ -238,16 +253,15 @@ This packackage aims to make an reducer that is completely typed (it provides pa
 
 **WIP**
 
-I'm open for all suggestions, but I'm really interested in a few aspects:
+I'm open for all suggestions, but I'm really interested in a few aspects (till I figure out a better way of communication by Github issues it is):
 
-* That name is horrible, but there is already so many flavours of packages that combine Redux and TypeScript... If you know a good name I'd love to hear!
+* Is there any arguments to be made against decrepitation of the 'typed-redux-actions-reducer' npm package to switch to the name 'typed-redux-helpers'? I'd like to do that early in the lifecycle.
+* Is there interest in a simple project where I show ways to create a typed reducer without the need for an additional package?
 * Is there interest in a Builder which registers a store and returns a Variation of declareActionCreater that automatically dispatches
 * Should I maybe handle errors differently, always allowing to dispatch an error with `actionCreater({error: {}})`? I would also add the option to do `actionCreater({payload: {}})` as alternative to just `actionCreater()` in that case.
 * ...more stuff I cant list right now.
 
 ## TODO:
-
-* Break up the monolith of almost 500 lines
 
 * write snapshot-tests
 
@@ -255,7 +269,7 @@ I'm open for all suggestions, but I'm really interested in a few aspects:
 
 **WIP**
 
-I recommend anyone new to/ willing to Improve his handling of the COmbination Typescript, React and Redux to read [this Guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+I recommend anyone new to/ willing to improve his handling of the combination Typescript, React and Redux to read [this Guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
 
 ## Credits
