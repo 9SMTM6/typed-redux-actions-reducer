@@ -1,4 +1,4 @@
-import { declareActionCreater, createReducer, ActionCreator, Action } from "../../src/typedReduxUtils";
+import { declareActionCreater, createReducer, ActionCreater, Action } from "../../src";
 
 const newActionCreater = declareActionCreater(
     'NEW_ACTION',
