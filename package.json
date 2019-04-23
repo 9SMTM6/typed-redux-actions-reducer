@@ -4,7 +4,7 @@
   "description": "A framework helping with the reduction of Boilerplate and correctly Typing everything when combining Redux with Typescript.",
   "main": "build/index.js",
   "scripts": {
-    "broadcast":"tsc && git push && npm publish",
+    "broadcast": "tsc && git push && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1",
     "run-usage": "tsc --project usage && node usage/compiled/usage/reducer.js"
   },
