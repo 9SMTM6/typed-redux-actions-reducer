@@ -267,7 +267,10 @@ I'm open for all suggestions, but I'm really interested in a few aspects (till I
 
 ## TODO:
 
-* write snapshot-tests
+1. complete type tests with dtslint
+1. Switch types to easier format with less declared types
+1. while doing that add tha ability to always dispatch errors
+1. add subfolder import path for actioncreater/ reducer pair without the error-handling and its boilerplate
 
 ## Alternatives
 
